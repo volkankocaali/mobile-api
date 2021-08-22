@@ -15,7 +15,7 @@ class VerificationApiController extends Controller
      * Handle the incoming request.
      *
      * @param Request $request
-     * @param $receipt
+     * @param string $receipt
      * @return JsonResponse
      */
     public function __invoke(Request $request, string $receipt) : JsonResponse

@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\v1\CheckSubscription;
 use App\Http\Controllers\Api\v1\PurchaseController;
 use App\Http\Controllers\Api\v1\RegisterController;
 use App\Http\Controllers\Api\v1\VerificationApiController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Verification Mock Api
     Route::get('verification/{receipt}',VerificationApiController::class);
+
     Route::post('purchase',[PurchaseController::class,'verification']);
     Route::get('check-subscription',CheckSubscription::class);
+
 });

@@ -18,7 +18,7 @@ class PurchaseRepository implements PurchaseRepositoryInterface {
         return $this->model->create($data);
     }
     public function find($id) : Purchase {
-        return $this->model->find($id)->first();
+        return $this->model->where('device_id',$id)->first();
     }
 
 }

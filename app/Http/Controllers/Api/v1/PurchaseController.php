@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Helpers\RateLimit;
 use App\Helpers\Verification;
 use App\Http\Controllers\Controller;
+use App\Models\Purchase;
 use App\Repositories\Purchase\PurchaseRepositoryInterface;
-use GuzzleHttp\Client;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Http;
-use Symfony\Component\Console\Input\Input;
 
 class PurchaseController extends Controller
 {
@@ -22,29 +21,26 @@ class PurchaseController extends Controller
         $this->purchaseRepository = $purchaseRepository;
     }
 
-    public function verification(Request $request){
-        //$str = Str::uuid();
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function verification(Request $request): JsonResponse
+    {
         $receiptHash = $request->receipt_hash;
         $device = $request->user();
 
         // Verification Api
-
         $response = Verification::get($receiptHash);
-
-        print_r($response); die();
-        /*$request = Request::create('/api/verification/'.$receipt_hash, 'GET');
-        $response = Route::dispatch($request);*/
-
 
         // Create Database
         $return = $this->purchaseRepository->create([
             'device_id' => $device->id,
             'receipt_token' => $receiptHash,
-            'status' => $response->original['status'],
-            'expire_date' => $response->original['expire_date'],
+            'status' => $response->status,
+            'expire_date' => $response->expire_date,
         ]);
 
-        return Response::json($return,200);
-
+        return Response::json(['result' => 1, 'data' => $return],200);
     }
 }

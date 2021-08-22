@@ -28,12 +28,15 @@ class CheckSubscription extends Controller
     public function __invoke(Request $request) :JsonResponse
     {
         $device = $request->user();
-        $purchase = $this->purchaseRepository->find($device->id)->first();
+        $purchase = $this->purchaseRepository->find($device->id);
 
 
         return Response::json([
-            'check_subscription' => $purchase->status,
-            'expire_date' => $purchase->expire_date,
+            'result' => 1,
+            'data' => [
+                'check_subscription' => $purchase->status,
+                'expire_date' => $purchase->expire_date,
+            ]
         ]);
     }
 }
